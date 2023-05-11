@@ -47,24 +47,24 @@ void broadcast_Setup()
   pServer->setCallbacks(new MyServerCallbacks());
 
   // service one
-  BLEService *pService = pServer->createService(SERVICE_UUID);
-  pApp_Characteristic = pService->createCharacteristic(
+  BLEService *pAppService = pServer->createService(SERVICE_UUID);
+  pApp_Characteristic = pAppService->createCharacteristic(
       APP_CHARACTERISTIC_UUID,
       BLECharacteristic::PROPERTY_NOTIFY);
 
   pApp_Characteristic->addDescriptor(new BLE2902());
-  pService->start();
+  pAppService->start();
 
   // service two
-
-  pSensor_Characteristic = pService->createCharacteristic(
+  BLEService *pSensorService = pServer->createService(SERVICE_UUID);
+  pSensor_Characteristic = pSensorService->createCharacteristic(
                       BLEUUID(SENSOR_CHARACTERISTIC_UUID),
                       BLECharacteristic::PROPERTY_WRITE
                     );
 
   pSensor_Characteristic->setCallbacks(new BLECharacteristicCallbacks());
 
-  pService->start();
+  pSensorService->start();
 }
 
 void broadcast_SM()
@@ -85,4 +85,12 @@ void broadcast_SM()
 
 void broadcast_setMessage(std::string inMessage){
   message = inMessage;
+}
+
+void set_horizontal_acc(std::string x){
+  speed_horizontal = x;
+}
+
+void set_vertical_acc(std::string x){
+  speed_vertical = x;
 }
